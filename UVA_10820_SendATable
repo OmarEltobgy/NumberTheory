@@ -1,0 +1,45 @@
+import java.util.*;
+import java.io.*;
+public class UVA_10820_SendATable
+{
+  public static int Phi(int N)
+	{
+		int result = N;
+		if(N==1)
+			return 0;
+		for(int i=2; i*i<=N; i++)
+			if(N%i == 0)
+			{
+				result = result - result/i;
+				while(N%i == 0)
+					N = N/i;
+			}
+		if(N>1)
+			result = result - result/N;
+		return result;
+	}
+	
+	public static void main(String[] args) throws IOException 
+	{
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out));
+		int[] result = new int[50002];
+		result[1] = 1;
+		for(int i=2; i<50002; i++)
+		{
+			result[i] = result[i-1] + 2*Phi(i);
+		}
+		int N;
+		String S;
+		S = in.readLine();
+		N = Integer.parseInt(S);
+		while(N!=0)
+		{
+			out.println(result[N]);
+			S = in.readLine();
+			N = Integer.parseInt(S);
+		}
+		in.close();
+		out.close();
+	}
+}
