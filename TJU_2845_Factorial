@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <vector>
+using namespace std;
+
+long long NNN[100010], x[100010];
+vector<int> ppp;
+int main()
+{
+	long long number;
+	int base, i, j;
+	int primeFactor[100010];
+	memset(primeFactor, -1, sizeof(primeFactor));
+	primeFactor[0] = 0;
+	primeFactor[1] = 1;
+	for(i=2; i<sqrt(100010); i++)
+	{
+		if(primeFactor[i] == -1)
+		{
+			primeFactor[i] = i;
+			for(j=i*i; j<100010; j+=i)
+			{
+				if(primeFactor[j] == -1)
+				{	
+					primeFactor[j] = i;
+				}
+			}
+		}
+	}
+	for(j=i; j<100010; j++)
+	{
+		if(primeFactor[j] == -1)
+		{
+			primeFactor[j] = j;
+		}
+	}
+	scanf("%lld %d",&number,&base);
+	while(base != 0 || number != 0)
+	{
+		memset(NNN, 0, sizeof(NNN));
+		ppp.clear();
+		int temp = base;
+		while(primeFactor[temp] != 1)
+		{
+			if(NNN[primeFactor[temp]] == 0)
+			{
+				ppp.push_back(primeFactor[temp]);
+			}
+			NNN[primeFactor[temp]] ++;
+			temp = temp / primeFactor[temp];
+		}
+		memset(x, 0, sizeof(x));
+		for(int m=0; m<ppp.size(); m++)
+		{
+			int temp = number;
+			int P=1;
+			while(temp/pow(ppp[m], P) >= 1)
+			{
+				x[m] += temp/pow(ppp[m], P);
+				P++;
+			}
+		}
+		long long mini = 100000000000000000;
+		for(int m=0; m<ppp.size(); m++)
+		{
+			long long t = x[m]/NNN[ppp[m]];
+			mini = min(mini, t);
+		}
+		printf("%d\n", mini);
+		scanf("%lld %d",&number,&base);
+	}
+}
